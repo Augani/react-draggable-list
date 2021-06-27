@@ -4,43 +4,45 @@ import { motion } from 'framer-motion';
 import { usePositionReorder } from './usePositionReorder';
 import { useMeasurePosition } from './useMeasurePosition';
 
-const List = [1, 2, 3, 4, 5, 6];
+const List = ["Item One", "Item Two", "Item Three", "Item Four"];
 
 export default function App() {
   const [updatedList, updatePosition, updateOrder] = usePositionReorder(List);
+
   return (
-    <div className="container">
-      {updatedList.map((n, index) => (
+    <ul className="container">
+      {updatedList.map((name, index) => (
         <Item
-          key={index}
+          key={name}
           ind={index}
           updateOrder={updateOrder}
           updatePosition={updatePosition}
-          updat
-          name={n}
+          name={name}
         />
       ))}
-    </div>
+    </ul>
   );
 }
 
 function Item({ name, updateOrder, updatePosition, ind }) {
   const [isdragged, setIsDragged] = React.useState(false);
 
-  const itemRef = useMeasurePosition(pos => {
-    updatePosition(ind, pos);
-  });
+  const itemRef = useMeasurePosition(pos => updatePosition(ind, pos));
 
   return (
-    <motion.div
+      <li>
+        <motion.div
       style={{
-        zIndex: isdragged ? 2 : 1
+        zIndex: isdragged ? 2 : 1,
+        height: name.length * 10
       }}
       dragConstraints={{
         top: 0,
         bottom: 0
       }}
+      dragElastic={1}
       layout
+      
       ref={itemRef}
       onDragStart={() => setIsDragged(true)}
       onDragEnd={() => setIsDragged(false)}
@@ -48,13 +50,11 @@ function Item({ name, updateOrder, updatePosition, ind }) {
         scale: isdragged ? 1.05 : 1
       }}
       onViewportBoxUpdate={(_, delta) => {
-        if (isdragged) {
-          updateOrder(ind, delta.y.translate);
-        }
+       isdragged && updateOrder(ind, delta.y.translate);
       }}
-      drag="y"
-    >
+      drag="y">
       {name}
     </motion.div>
+        </li>
   );
 }

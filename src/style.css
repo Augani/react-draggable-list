@@ -31,6 +31,8 @@ body {
   display: grid;
   grid-template-columns: 1fr;
   gap: 9px 0px;
+  position: relative;
+  list-style: none;
 }
 
 .container div {
@@ -40,7 +42,9 @@ body {
   background-color: white;
   font-size: 2rem;
   display: flex;
+  cursor: pointer;
   flex-direction: row;
   justify-content: center;
   align-items: center;
+  position: relative;
 }
